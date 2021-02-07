@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script type="text/javascript" src="./default.js"></script>
+        <link rel="stylesheet" href="default.css" />
+    </head>
+    <body>
+        <div id="touchpad"></div>
+        <input id="text-input" type="text" />
+        <img id="enter" src="./enter.png" onclick="javascript:darken(this); sendTextToRoku();" />
+        <img id="backspace" src="./backspace.png" onclick="javascript:darken(this); pressKeyOnRoku('Backspace');" />
+        <img id="clear" src="./clear.png" onclick="javascript:darken(this); clearTextOnRoku();" />
+        <img id="back" src="./back.png" onclick="javascript:darken(this); pressKeyOnRoku('Back');" />
+        <img id="home" src="./home.png" onclick="javascript:darken(this); pressKeyOnRoku('Home');" />
+        <img id="option" src="./option.png" onclick="javascript:darken(this); pressKeyOnRoku('Info');" />
+        <img id="play" src="./play.png" onclick="javascript:darken(this); pressKeyOnRoku('Play');" />
+        <img id="reverse" src="./reverse.png" onclick="javascript:darken(this); pressKeyOnRoku('Rev');" />
+        <img id="forward" src="./forward.png" onclick="javascript:darken(this); pressKeyOnRoku('Fwd');" />
+        <img id="power-on" src="./power-on.png" onclick="javascript:darken(this); turnTheaterOn();" />
+        <img id="power-off" src="./power-off.png" onclick="javascript:darken(this); turnTheaterOff();" />
+        <img id="lights-on" src="./lights.png" onclick="javascript:darken(this); turnLightsOn();" />
+        <div id="lights-on-label">Lights On</div>
+        <img id="lights-off" src="./lights.png" onclick="javascript:darken(this); turnLightsOff();" />
+        <div id="lights-off-label">Lights Off</div>
+        <img id="lights-dining" src="./lights.png" onclick="javascript:darken(this); turnLightsToDining();" />
+        <div id="lights-dining-label">Dining Mode</div>
+        <img id="projector-on" src="./on.png" onclick="javascript:darken(this); turnProjectorOn();" />
+        <img id="projector-off" src="./off.png" onclick="javascript:darken(this); turnProjectorOff();" />
+        <div id="projector-label">PROJ</div>
+        <img id="receiver-on" src="./on.png" onclick="javascript:darken(this); turnReceiverOn();" />
+        <img id="receiver-off" src="./off.png" onclick="javascript:darken(this); turnReceiverOff();" />
+        <div id="receiver-label">RCVR</div>
+        <img id="volume-up" src="./volume-up.png" onclick="javascript:darken(this); turnVolumeUp();" />
+        <img id="mute" src="./mute.png" onclick="javascript:darken(this); muteVolume();" />
+        <img id="volume-down" src="./volume-down.png" onclick="javascript:darken(this); turnVolumeDown();" />
+        <div id="volume-label">??</div>
+        <img id="netflix" src="./channel-netflix.png" onclick="javascript:darken(this); launchOnRoku('Netflix', 12);" />
+        <img id="hulu" src="./channel-hulu.png" onclick="javascript:darken(this); launchOnRoku('Hulu', 2285);" />
+        <img id="disney" src="./channel-disney.png" onclick="javascript:darken(this); launchOnRoku('Disney+', 291097);" />
+        <img id="hbo" src="./channel-hbo.png" onclick="javascript:darken(this); launchOnRoku('HBO MAX', 61322);" />
+        <img id="appletv" src="./channel-appletv.png" onclick="javascript:darken(this); launchOnRoku('AppleTV', 551012);" />
+        <img id="amazon" src="./channel-amazon.png" onclick="javascript:darken(this); launchOnRoku('Amazon Prime Video', 13);" />
+        <div id="status">Welcome to Peter's home theater...</div>
+    </body>
+</html>
