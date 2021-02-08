@@ -264,6 +264,18 @@ function muteVolume() {
         });
 }
 
+function setReceiverInput(input) {
+    raiseMessage('black', `Attempting to change the input to "${input}"...`);
+    axios
+        .post(`./api/receiver/input/${input}`)
+        .then(function () {
+            raiseMessage('green', `Successfully changed input to "${input}".`);
+        })
+        .catch(function (error) {
+            raiseMessage('red', error);
+        });
+}
+
 function pressKeyOnRoku(key) {
     axios.post('./api/roku/press/' + key).catch(function () {
         raiseMessage('red', error);
@@ -277,24 +289,21 @@ function launchOnRoku(name, appId) {
         .then(function () {
             raiseMessage('green', `Successfully launched channel ${name}.`);
         })
-        .catch(function () {
+        .catch(function (error) {
             raiseMessage('red', error);
         });
 }
 
-function sendTextToRoku() {
+function sendTextToRoku(msg) {
     raiseMessage('black', `Attempting to send "${msg}" to Roku...`);
-    var msg = document.getElementById('text-input').value;
-    if (msg) {
-        axios
-            .post('./api/roku/text', msg)
-            .then(function () {
-                raiseMessage('green', `Sent "${msg}" to Roku.`);
-            })
-            .catch(function () {
-                raiseMessage('red', error);
-            });
-    }
+    axios
+        .post('./api/roku/text', msg)
+        .then(function () {
+            raiseMessage('green', `Sent "${msg}" to Roku.`);
+        })
+        .catch(function (error) {
+            raiseMessage('red', error);
+        });
 }
 
 function clearTextOnRoku() {
@@ -308,9 +317,23 @@ function clearTextOnRoku() {
         .then(function () {
             raiseMessage('green', `Sent 20 backspace characters to Roku.`);
         })
-        .catch(function () {
+        .catch(function (error) {
             raiseMessage('red', error);
         });
+}
+
+function submitText() {
+    var msg = document.getElementById('text-input').value;
+    if (msg) {
+        if (
+            msg.substring(0, 7) == '!input:' ||
+            msg.substring(0, 7) == '$input:'
+        ) {
+            setReceiverInput(msg.substring(7));
+        } else {
+            sendTextToRoku(msg);
+        }
+    }
 }
 
 ready((event) => {

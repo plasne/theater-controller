@@ -26,8 +26,8 @@ func sendReceiverFunc(run runFunc) error {
 	return nil
 }
 
-func sendToReceiver(conn net.Conn, cmd []byte) error {
-	_, err := conn.Write(cmd)
+func sendToReceiver(conn net.Conn, cmd string) error {
+	_, err := conn.Write([]byte(cmd))
 	if err != nil {
 		log.Printf("receiver-send-error: %v", err)
 		return err
@@ -37,7 +37,7 @@ func sendToReceiver(conn net.Conn, cmd []byte) error {
 
 func askReceiver(conn net.Conn, cmd []byte) (*string, error) {
 
-	_, err := conn.Write(cmd)
+	_, err := conn.Write([]byte(cmd))
 	if err != nil {
 		log.Printf("receiver-send-error: %v", err)
 		return nil, err
@@ -58,7 +58,7 @@ func turnReceiverOn() error {
 	receiverMutex.Lock()
 	defer receiverMutex.Unlock()
 	return sendReceiverFunc(func(conn net.Conn) error {
-		err := sendToReceiver(conn, []byte("PWON\r"))
+		err := sendToReceiver(conn, "PWON\r")
 		return err
 	})
 }
@@ -67,7 +67,7 @@ func turnReceiverOff() error {
 	receiverMutex.Lock()
 	defer receiverMutex.Unlock()
 	return sendReceiverFunc(func(conn net.Conn) error {
-		err := sendToReceiver(conn, []byte("PWSTANDBY\r"))
+		err := sendToReceiver(conn, "PWSTANDBY\r")
 		return err
 	})
 }
@@ -125,7 +125,30 @@ func muteReceiver() error {
 	receiverMutex.Lock()
 	defer receiverMutex.Unlock()
 	return sendReceiverFunc(func(conn net.Conn) error {
-		err := sendToReceiver(conn, []byte("MUON\r"))
+		err := sendToReceiver(conn, "MUON\r")
 		return err
 	})
+}
+
+func setReceiverInput(input string) error {
+	receiverMutex.Lock()
+	defer receiverMutex.Unlock()
+	switch strings.ToLower(input) {
+	case "roku":
+		return sendReceiverFunc(func(conn net.Conn) error {
+			err := sendToReceiver(conn, "SISAT/CBL\r")
+			return err
+		})
+	case "apple", "appletv":
+		return sendReceiverFunc(func(conn net.Conn) error {
+			err := sendToReceiver(conn, "SIBD\r")
+			return err
+		})
+	case "dvd", "bluray", "disc":
+		return sendReceiverFunc(func(conn net.Conn) error {
+			err := sendToReceiver(conn, "SIDVD\r")
+			return err
+		})
+	}
+	return errors.New("specified input is not valid.")
 }

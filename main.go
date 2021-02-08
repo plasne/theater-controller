@@ -179,6 +179,13 @@ func main() {
 		}
 	})
 
+	r.HandleFunc("/api/receiver/input/{input}", func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		if err := setReceiverInput(vars["input"]); err != nil {
+			http.Error(w, err.Error(), 500)
+		}
+	})
+
 	r.HandleFunc("/api/roku/press/{key}", func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		if err := pressKeyOnRoku(vars["key"]); err != nil {
