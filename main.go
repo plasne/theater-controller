@@ -67,7 +67,12 @@ func init() {
 	rokuAddress = os.Getenv("ROKU")
 	lightsAddress = os.Getenv("LIGHTS")
 	lightsGroup = os.Getenv("LIGHTS_GROUP")
+	lightsDining = strings.Split(os.Getenv("LIGHTS_DINING"), ",")
+	for i := range lightsDining {
+		lightsDining[i] = strings.TrimSpace(lightsDining[i])
+	}
 	lightsKey = os.Getenv("LIGHTS_KEY")
+
 	if projectorAddress == "" || receiverAddress == "" || rokuAddress == "" || lightsAddress == "" || lightsGroup == "" || lightsKey == "" {
 		log.Fatal("you must supply the following env vars: PROJECTOR, RECEIVER, ROKU, LIGHTS, LIGHTS_GROUP, LIGHTS_KEY.")
 	}
