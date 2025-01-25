@@ -1,84 +1,77 @@
 package main
 
 import (
-	"log"
-	"net"
+	"bytes"
+	"crypto/tls"
+	"fmt"
+	"net/http"
 	"sync"
-	"time"
 )
 
 var lightsAddress string
+var lightsGroup string
+var lightsKey string
 var lightsMutex sync.Mutex
 
-func sendLightFunc(run runFunc) error {
-	conn, err := net.Dial("udp", lightsAddress)
-	if err != nil {
-		log.Printf("light-conn-error: %v\n", err)
-		return err
+func sendHueHubRequest(method string, url string, body []byte) error {
+	// create a custom HTTP client that ignores SSL certificate errors
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
 	}
-	if err := run(conn); err != nil {
-		return err
-	}
-	conn.Close()
-	return nil
-}
 
-func sendLightCmd(conn net.Conn, cmd byte) error {
-	_, err := conn.Write([]byte{cmd, 00, 85})
+	// create a new POST request with the given body
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(body))
 	if err != nil {
-		log.Printf("light-send-error: %v\n", err)
 		return err
 	}
-	time.Sleep(100 * time.Millisecond)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("hue-application-key", lightsKey)
+
+	// Send the request
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
 	return nil
 }
 
 func setLightsToFullOn() error {
 	lightsMutex.Lock()
 	defer lightsMutex.Unlock()
-	return sendLightFunc(func(conn net.Conn) error {
-		if err := sendLightCmd(conn, 53); err != nil { // all on
-			return err
-		}
-		if err := sendLightCmd(conn, 181); err != nil { // full brightness
-			return err
-		}
-		return nil
-	})
+	err := sendHueHubRequest(
+		"PUT",
+		fmt.Sprintf("https://%v/clip/v2/resource/grouped_light/%v", lightsAddress, lightsGroup),
+		[]byte(`{ "on": { "on": true }, "dimming": { "brightness": 100.0 } }`),
+	)
+	return err
 }
 
 func setLightsToFullOff() error {
 	lightsMutex.Lock()
 	defer lightsMutex.Unlock()
-	return sendLightFunc(func(conn net.Conn) error {
-		err := sendLightCmd(conn, 57) // all off
-		return err
-	})
+	err := sendHueHubRequest(
+		"PUT",
+		fmt.Sprintf("https://%v/clip/v2/resource/grouped_light/%v", lightsAddress, lightsGroup),
+		[]byte(`{ "on": { "on": false } }`),
+	)
+	return err
 }
 
 func setLightsToDiningMode() error {
 	lightsMutex.Lock()
 	defer lightsMutex.Unlock()
-	return sendLightFunc(func(conn net.Conn) error {
-
-		if err := sendLightCmd(conn, 53); err != nil { // all on
-			return err
-		}
-
-		// NOTE: there are 10 light-levels, however, we want them at the dimmest state and this is UDP, so not always reliable
-		for i := 0; i < 14; i++ {
-			if err := sendLightCmd(conn, 52); err != nil { //dim
-				return err
-			}
-		}
-
-		if err := sendLightCmd(conn, 59); err != nil { // zone 1 off
-			return err
-		}
-		if err := sendLightCmd(conn, 54); err != nil { // zone 4 off
-			return err
-		}
-
-		return nil
-	})
+	err := sendHueHubRequest(
+		"PUT",
+		fmt.Sprintf("https://%v/clip/v2/resource/grouped_light/%v", lightsAddress, lightsGroup),
+		[]byte(`{ "on": { "on": true }, "dimming": { "brightness": 10.0 } }`),
+	)
+	return err
 }

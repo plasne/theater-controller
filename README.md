@@ -28,7 +28,7 @@ Here are some of my thoughts on the design.
 
   - It is easier to debug and update solutions that use this design.
 
-  - Folks visiting do not need to install an app to control the theater, they just need a table. Perhaps I could write a more compact design for a phone.
+  - Folks visiting do not need to install an app to control the theater, they just need a tablet. Perhaps I could write a more compact design for a phone.
 
   There is also one big disadvantage...
 

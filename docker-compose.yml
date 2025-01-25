@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - LIGHTS_KEY=${LIGHTS_KEY}
+    env_file:
+      - .env
+    ports:
+      - "9844:9844"

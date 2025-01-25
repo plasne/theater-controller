@@ -66,8 +66,10 @@ func init() {
 	receiverAddress = os.Getenv("RECEIVER")
 	rokuAddress = os.Getenv("ROKU")
 	lightsAddress = os.Getenv("LIGHTS")
-	if projectorAddress == "" || receiverAddress == "" || rokuAddress == "" || lightsAddress == "" {
-		log.Fatal("you must supply the following env vars: PROJECTOR, RECEIVER, ROKU, LIGHTS.")
+	lightsGroup = os.Getenv("LIGHTS_GROUP")
+	lightsKey = os.Getenv("LIGHTS_KEY")
+	if projectorAddress == "" || receiverAddress == "" || rokuAddress == "" || lightsAddress == "" || lightsGroup == "" || lightsKey == "" {
+		log.Fatal("you must supply the following env vars: PROJECTOR, RECEIVER, ROKU, LIGHTS, LIGHTS_GROUP, LIGHTS_KEY.")
 	}
 	if potential, err := strconv.ParseInt(os.Getenv("PROJECTOR_IR_PORT"), 10, 64); err == nil {
 		projectorIrPort = int(potential)
