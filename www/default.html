@@ -2,9 +2,11 @@
     <head>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script type="text/javascript" src="./default.js"></script>
+        <link rel="manifest" href="/manifest.json">
         <link rel="stylesheet" href="default.css" />
     </head>
     <body>
+        <div id="header">Theater Controller v2.0</div>
         <div id="touchpad"></div>
         <input id="text-input" type="text" />
         <img id="enter" src="./enter.png" onclick="javascript:darken(this); submitText();" />
@@ -19,11 +21,11 @@
         <img id="power-on" src="./power-on.png" onclick="javascript:darken(this); turnTheaterOn();" />
         <img id="power-off" src="./power-off.png" onclick="javascript:darken(this); turnTheaterOff();" />
         <img id="lights-on" src="./lights.png" onclick="javascript:darken(this); turnLightsOn();" />
-        <div id="lights-on-label">Lights On</div>
+        <div id="lights-on-label">lights on</div>
         <img id="lights-off" src="./lights.png" onclick="javascript:darken(this); turnLightsOff();" />
-        <div id="lights-off-label">Lights Off</div>
+        <div id="lights-off-label">lights off</div>
         <img id="lights-dining" src="./lights.png" onclick="javascript:darken(this); turnLightsToDining();" />
-        <div id="lights-dining-label">Dining Mode</div>
+        <div id="lights-dining-label">dining mode</div>
         <img id="projector-on" src="./on.png" onclick="javascript:darken(this); turnProjectorOn();" />
         <img id="projector-off" src="./off.png" onclick="javascript:darken(this); turnProjectorOff();" />
         <div id="projector-label">PROJ</div>
@@ -35,11 +37,13 @@
         <img id="volume-down" src="./volume-down.png" onclick="javascript:darken(this); turnVolumeDown();" />
         <div id="volume-label">??</div>
         <img id="netflix" src="./channel-netflix.png" onclick="javascript:darken(this); launchOnRoku('Netflix', 12);" />
-        <img id="hulu" src="./channel-hulu.png" onclick="javascript:darken(this); launchOnRoku('Hulu', 2285);" />
+        <img id="youtube" src="./channel-youtube.png" onclick="javascript:darken(this); launchOnRoku('YouTube', 837);" />
         <img id="disney" src="./channel-disney.png" onclick="javascript:darken(this); launchOnRoku('Disney+', 291097);" />
         <img id="hbo" src="./channel-hbo.png" onclick="javascript:darken(this); launchOnRoku('HBO MAX', 61322);" />
         <img id="appletv" src="./channel-appletv.png" onclick="javascript:darken(this); launchOnRoku('AppleTV', 551012);" />
         <img id="amazon" src="./channel-amazon.png" onclick="javascript:darken(this); launchOnRoku('Amazon Prime Video', 13);" />
+        <img id="paramount" src="./channel-paramount.png" onclick="javascript:darken(this); launchOnRoku('Paramount+', 31440);" />
+        <img id="peacock" src="./channel-peacock.png" onclick="javascript:darken(this); launchOnRoku('Peacock', 593099);" />
         <div id="status">Welcome to Peter's home theater...</div>
     </body>
 </html>

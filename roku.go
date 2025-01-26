@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"sync"
@@ -20,7 +19,7 @@ func pressKeyOnRoku(key string) error {
 	if err != nil {
 		return err
 	}
-	_, _ = io.Copy(ioutil.Discard, resp.Body)
+	_, _ = io.Copy(io.Discard, resp.Body)
 	resp.Body.Close()
 	return nil
 }
@@ -33,7 +32,7 @@ func launchOnRoku(appId string) error {
 	if err != nil {
 		return err
 	}
-	_, _ = io.Copy(ioutil.Discard, resp.Body)
+	_, _ = io.Copy(io.Discard, resp.Body)
 	resp.Body.Close()
 	return nil
 }
@@ -48,7 +47,7 @@ func sendTextToRoku(text string) error {
 		if err != nil {
 			return err
 		}
-		_, _ = io.Copy(ioutil.Discard, resp.Body)
+		_, _ = io.Copy(io.Discard, resp.Body)
 		resp.Body.Close()
 	}
 	return nil
@@ -63,7 +62,7 @@ func clearTextOnRoku() error {
 		if err != nil {
 			return err
 		}
-		_, _ = io.Copy(ioutil.Discard, resp.Body)
+		_, _ = io.Copy(io.Discard, resp.Body)
 		resp.Body.Close()
 	}
 	return nil

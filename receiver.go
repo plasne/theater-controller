@@ -19,10 +19,10 @@ func sendReceiverFunc(run runFunc) error {
 		log.Printf("receiver-conn-error: %v\n", err)
 		return err
 	}
+	defer conn.Close()
 	if err := run(conn); err != nil {
 		return err
 	}
-	conn.Close()
 	return nil
 }
 
@@ -36,7 +36,6 @@ func sendToReceiver(conn net.Conn, cmd string) error {
 }
 
 func askReceiver(conn net.Conn, cmd []byte) (*string, error) {
-
 	_, err := conn.Write([]byte(cmd))
 	if err != nil {
 		log.Printf("receiver-send-error: %v", err)
@@ -51,16 +50,24 @@ func askReceiver(conn net.Conn, cmd []byte) (*string, error) {
 	case <-time.After(250 * time.Millisecond):
 		return nil, errors.New("timeout without response")
 	}
-
 }
 
 func turnReceiverOn() error {
 	receiverMutex.Lock()
 	defer receiverMutex.Unlock()
-	return sendReceiverFunc(func(conn net.Conn) error {
+	if err := sendReceiverFunc(func(conn net.Conn) error {
 		err := sendToReceiver(conn, "PWON\r")
 		return err
-	})
+	}); err != nil {
+		return err
+	}
+	if err := sendReceiverFunc(func(conn net.Conn) error {
+		err := sendToReceiver(conn, "SISAT/CBL\r")
+		return err
+	}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func turnReceiverOff() error {
@@ -150,5 +157,5 @@ func setReceiverInput(input string) error {
 			return err
 		})
 	}
-	return errors.New("specified input is not valid.")
+	return errors.New("specified input is not valid")
 }
