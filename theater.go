@@ -13,7 +13,7 @@ func turnTheaterOn() error {
 		wg.Done()
 	}()
 	go func() {
-		err2 = turnProjectorOn()
+		//err2 = turnProjectorOn()
 		wg.Done()
 	}()
 	go func() {
@@ -33,7 +33,7 @@ func turnTheaterOff() error {
 		wg.Done()
 	}()
 	go func() {
-		err2 = turnProjectorOff()
+		//err2 = turnProjectorOff()
 		wg.Done()
 	}()
 	go func() {
