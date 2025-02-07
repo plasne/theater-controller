@@ -6,6 +6,7 @@ services:
       context: .
       args:
         - LIGHTS_KEY=${LIGHTS_KEY}
+    restart: always
     env_file:
       - .env
     ports:
